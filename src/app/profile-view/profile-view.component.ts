@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute,Router } from '@angular/router';
-import { HttpClient,HttpHeaders } from '@angular/common/http';
+import { ActivatedRoute, Router } from '@angular/router';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { HttpService } from '../http.service';
 
 
@@ -10,9 +10,10 @@ import { HttpService } from '../http.service';
   styleUrls: ['./profile-view.component.css']
 })
 export class ProfileViewComponent implements OnInit {
-  username:any;
-  photos:any;
-  constructor(private HttpService:HttpService,private route: ActivatedRoute, private http:HttpClient, private router:Router) { }
+  username: any;
+  photos: any;
+  profile: any;
+  constructor(private HttpService: HttpService, private route: ActivatedRoute, private http: HttpClient, private router: Router) { }
 
   ngOnInit() {
     this.username = this.route.snapshot.paramMap.get('username');
@@ -21,23 +22,24 @@ export class ProfileViewComponent implements OnInit {
     this.userProfile()
 
   }
-  userPhotos(){
-    this.HttpService.userPhotos(this.username).subscribe((res)=>{
+  userPhotos() {
+    this.HttpService.userPhotos(this.username).subscribe((res) => {
       console.log(res)
       this.photos = res;
-    },(err)=>{
+    }, (err) => {
 
     })
   }
-  userProfile(){
-    this.HttpService.userProfile(this.username).subscribe((res)=>{
+  userProfile() {
+    this.HttpService.userProfile(this.username).subscribe((res) => {
       console.log(res)
-    },(err)=>{
+      this.profile = res;
+    }, (err) => {
 
     })
   }
-  downloadImage(link){
-    window.open(link,'_blank');
+  downloadImage(link) {
+    window.open(link, '_blank');
   }
 
 }

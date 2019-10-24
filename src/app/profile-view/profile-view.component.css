@@ -1,0 +1,13 @@
+.profile-photo{
+    width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        overflow: hidden;
+        margin: 0 auto;
+}
+.fa{
+    cursor: pointer !important;
+}
+.back-button{
+    position: absolute;left:5%;color:white;z-index:5;
+}

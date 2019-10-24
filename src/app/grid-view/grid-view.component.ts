@@ -10,32 +10,40 @@ import { Router } from '@angular/router';
   styleUrls: ['./grid-view.component.css']
 })
 export class GridViewComponent implements OnInit {
-  photos:any;
-  searchQuery:any;
-  focusedvalue:Boolean = false;
-  constructor(private HttpService:HttpService,private router:Router) { }
+  photos: any[];
+  searchQuery: String;
+  focusedvalue: Boolean = false;
+  constructor(private HttpService: HttpService, private router: Router) { }
 
   ngOnInit() {
-    this.HttpService.getphotos().subscribe((res)=>{
+    this.getPhotos();
+  }
+  getPhotos() {
+    this.HttpService.getphotos().subscribe((res: any) => {
       console.log(res)
       this.photos = res;
-    },(err)=>{
+    }, (err) => {
       console.log(err)
     })
   }
-  searchPhotos(query){
-    this.HttpService.searchPhotos(query).subscribe((res:any)=>{
+  searchPhotos(query) {
+    this.HttpService.searchPhotos(query).subscribe((res: any) => {
       console.log(res)
       this.photos = res.results;
-    },(err)=>{
+    }, (err) => {
       console.log(err)
     })
   }
-  downloadImage(link){
-    window.open(link,'_blank');
+  downloadImage(link) {
+    window.open(link, '_blank');
   }
-  goToUserProfile(username){
+  goToUserProfile(username) {
     console.log(username)
     this.router.navigate([`profile/${username}`])
+  }
+  keyUp(e){
+    if(e.keyCode == 13){
+      this.searchPhotos(this.searchQuery);
+    }
   }
 }
