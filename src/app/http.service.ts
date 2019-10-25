@@ -12,17 +12,17 @@ export class HttpService {
   key = '2ced0226035301673f472f5085d7a9543a495aa155352ce17bdc4a5610d1bac6'
   constructor(private _http: HttpClient) { }
 
-  public getphotos() {
+  public getphotos(page) {
     const headers = new HttpHeaders({ 'Authorization': `Client-ID ${this.key}`});
-    return this._http.get(`${this.url}/photos/`,{headers:headers})
+    return this._http.get(`${this.url}/photos/?page=${page}`,{headers:headers})
   }
-  public searchPhotos(query) {
+  public searchPhotos(query,page) {
     const headers = new HttpHeaders({ 'Authorization': `Client-ID ${this.key}`});
-    return this._http.get(`${this.url}/search/photos/?query=${query}`,{headers:headers});
+    return this._http.get(`${this.url}/search/photos/?query=${query}&page=${page}`,{headers:headers});
   }
-  public userPhotos(username) {
+  public userPhotos(username,page) {
     const headers = new HttpHeaders({ 'Authorization': `Client-ID ${this.key}`});
-    return this._http.get(`${this.url}/users/${username}/photos`,{headers:headers});
+    return this._http.get(`${this.url}/users/${username}/photos?page=${page}`,{headers:headers});
   }
   public userProfile(username) {
     const headers = new HttpHeaders({ 'Authorization': `Client-ID ${this.key}`});

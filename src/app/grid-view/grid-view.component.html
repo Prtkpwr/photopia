@@ -1,41 +1,37 @@
 <div class="container">
     <!-- .lab-nav -->
-    <div class="wrapper">
+    <div class="wrapper" detect-scroll (onScroll)="handleScroll($event)" [bottomOffset]="50" [topOffset]="10">
         <div class="intro">
             <div class="search-box" [ngClass]="{'border-searching':focusedvalue}">
                 <div class="search-icon" [ngClass]="{'si-rotate':focusedvalue}"><i class="fa fa-search search-icon"></i>
                 </div>
                 <div action="" class="search-form">
-                    <input (keyup)="keyUp($event)" type="text" placeholder="Search images" (blur)="focusedvalue = false;"
-                        (focus)="focusedvalue = true;" id="search" [(ngModel)]="searchQuery" autocomplete="off">
+                    <input (keyup)="keyUp($event)" type="text" placeholder="Search images" (blur)="focusedvalue = false;" (focus)="focusedvalue = true;" id="search" [(ngModel)]="searchQuery" autocomplete="off">
                 </div>
-                <svg class="search-border" version="1.1" xmlns="http://www.w3.org/2000/svg"
-                    xmlns:xlink="http://www.w3.org/1999/xlink"
-                    xmlns:a="http://ns.adobe.com/AdobeSVGViewerExtensions/3.0/" x="0px" y="0px" viewBox="0 0 671 111"
-                    style="enable-background:new 0 0 671 111;" xml:space="preserve">
+                <svg class="search-border" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:a="http://ns.adobe.com/AdobeSVGViewerExtensions/3.0/" x="0px" y="0px" viewBox="0 0 671 111" style="enable-background:new 0 0 671 111;"
+                    xml:space="preserve">
                     <path class="border" d="M335.5,108.5h-280c-29.3,0-53-23.7-53-53v0c0-29.3,23.7-53,53-53h280"></path>
                     <path class="border" d="M335.5,108.5h280c29.3,0,53-23.7,53-53v0c0-29.3-23.7-53-53-53h-280"></path>
                 </svg>
-                <div (click)="searchPhotos(searchQuery)" class="go-icon" [ngClass]="{'go-in':searchQuery?.length > 0}">
+                <div (click)="photos=[];searchPhotos(searchQuery,1)" class="go-icon" [ngClass]="{'go-in':searchQuery?.length > 0}">
                     <i class="fa fa-arrow-right"></i></div>
             </div>
         </div>
         <!-- .intro -->
         <div class="masonry">
             <div class="brick" style="position:relative;" *ngFor="let x of photos">
-                <img src="{{x.urls.small}}" class="image" alt="{{x.alt_description}}">
+                <img [defaultImage]="x.urls.thumb" [lazyLoad]="x.urls.small" class="image" alt="{{x.alt_description}}">
                 <div class="middle">
-                    <div class="btn" (click)="goToUserProfile(x.user.username)"> <img style="opacity:1"
-                            src="{{x.user.profile_image.small}}" alt=""> {{x.user.username}}</div>
+                    <div class="btn" (click)="goToUserProfile(x.user.username)"> <img style="opacity:1" src="{{x.user.profile_image.small}}" alt=""> {{x.user.username}}</div>
                 </div>
                 <div class="custom-top-left">
                     <h6 style="color: white;"> <i class="fa fa-heart" aria-hidden="true"></i> {{x.likes}}</h6>
                 </div>
                 <div class="custom-top-right">
-                    <h6 (click)="downloadImage(x.links.download)" style="color: white;"> <i class="fa fa-download"
-                            aria-hidden="true"></i></h6>
+                    <h6 (click)="downloadImage(x.links.download)" style="color: white;"> <i class="fa fa-download" aria-hidden="true"></i></h6>
                 </div>
             </div>
         </div>
+        <div *ngIf="loader" style="text-align: center;"> Loading.... </div>
     </div>
 </div>

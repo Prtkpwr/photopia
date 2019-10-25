@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { HttpService } from '../http.service';
 
 
@@ -11,23 +11,39 @@ import { HttpService } from '../http.service';
 })
 export class ProfileViewComponent implements OnInit {
   username: any;
-  photos: any;
+  photos: any = [];
   profile: any;
+  eventValue: Boolean = true;
+  loader: Boolean = false;
+  pageNumber: any;
   constructor(private HttpService: HttpService, private route: ActivatedRoute, private http: HttpClient, private router: Router) { }
 
   ngOnInit() {
+    this.pageNumber = 1;
     this.username = this.route.snapshot.paramMap.get('username');
     console.log(this.username)
-    this.userPhotos()
+    this.userPhotos(1)
     this.userProfile()
 
   }
-  userPhotos() {
-    this.HttpService.userPhotos(this.username).subscribe((res) => {
-      console.log(res)
-      this.photos = res;
+  userPhotos(page) {
+    this.loader = true;
+    this.HttpService.userPhotos(this.username, page).subscribe((res: any) => {
+      if (res.length == 0) {
+        this.loader = false;
+      } else {
+        let itemsProcessed = 0;
+        res.forEach(element => {
+          this.photos.push(element)
+          itemsProcessed++
+          if (itemsProcessed === res.length) {
+            this.eventValue = true;
+            this.loader = false;
+          }
+        })
+      }
     }, (err) => {
-
+      console.log(err)
     })
   }
   userProfile() {
@@ -40,6 +56,25 @@ export class ProfileViewComponent implements OnInit {
   }
   downloadImage(link) {
     window.open(link, '_blank');
+  }
+  handleScroll(e) {
+    if (e.isReachingBottom) {
+      if (this.eventValue) {
+        this.eventValue = false;
+        this.scrollPagination()
+      }
+    }
+
+    // if (e.isReachingTop) {
+    //   // console.log(`the user is reaching the bottom`);
+    // }
+    // if (e.isWindowEvent) {
+    //   // console.log(`This event is fired on Window not on an element.`);
+    // }
+  }
+  scrollPagination() {
+    this.pageNumber = this.pageNumber + 1;
+    this.userPhotos(this.pageNumber)
   }
 
 }

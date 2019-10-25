@@ -1,8 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpService } from '../http.service';
-// import { ScrollEvent } from 'ngx-scroll-event';
 import { Router } from '@angular/router';
-
 
 @Component({
   selector: 'app-grid-view',
@@ -10,27 +8,59 @@ import { Router } from '@angular/router';
   styleUrls: ['./grid-view.component.css']
 })
 export class GridViewComponent implements OnInit {
-  photos: any[];
+  photos: any = [];
   searchQuery: String;
   focusedvalue: Boolean = false;
+  eventValue: Boolean = true;
+  loader: Boolean = true;
+  pageNumber: any;
+  allPageNumber: any;
   constructor(private HttpService: HttpService, private router: Router) { }
 
   ngOnInit() {
-    this.getPhotos();
+    this.getPhotos(1);
+    this.pageNumber = 1;
+    this.allPageNumber = 1;
   }
-  getPhotos() {
-    this.HttpService.getphotos().subscribe((res: any) => {
-      console.log(res)
-      this.photos = res;
+  getPhotos(page) {
+    this.loader = true;
+    this.HttpService.getphotos(page).subscribe((res: any) => {
+      if (res.length == 0) {
+        this.loader = false;
+      } else {
+        let itemsProcessed = 0;
+        res.forEach(element => {
+          this.photos.push(element)
+          itemsProcessed++
+          if (itemsProcessed === res.length) {
+            this.eventValue = true;
+            this.loader = false;
+          }
+        })
+      }
     }, (err) => {
       console.log(err)
+      this.loader = false;
     })
   }
-  searchPhotos(query) {
-    this.HttpService.searchPhotos(query).subscribe((res: any) => {
-      console.log(res)
-      this.photos = res.results;
+  searchPhotos(query, page) {
+    this.loader = true;
+    this.HttpService.searchPhotos(query, page).subscribe((res: any) => {
+      let itemsProcessed = 0;
+      if (res.results.length == 0) {
+        this.loader = false;
+      } else {
+        res.results.forEach(element => {
+          this.photos.push(element)
+          itemsProcessed++
+          if (itemsProcessed === res.results.length) {
+            this.eventValue = true;
+            this.loader = false;
+          }
+        })
+      }
     }, (err) => {
+      this.loader = false;
       console.log(err)
     })
   }
@@ -41,9 +71,35 @@ export class GridViewComponent implements OnInit {
     console.log(username)
     this.router.navigate([`profile/${username}`])
   }
-  keyUp(e){
-    if(e.keyCode == 13){
-      this.searchPhotos(this.searchQuery);
+  keyUp(e) {
+    if (e.keyCode == 13) {
+      this.photos = [];
+      this.searchPhotos(this.searchQuery, 1);
     }
+  }
+  handleScroll(e) {
+    if (e.isReachingBottom) {
+      if (this.eventValue && this.searchQuery) {
+        this.eventValue = false;
+        this.scrollPagination()
+      } else if (this.eventValue && !this.searchQuery) {
+        this.eventValue = false;
+        this.allScrollPagination()
+      }
+    }
+    // if (e.isReachingTop) {
+    //   // console.log(`the user is reaching the bottom`);
+    // }
+    // if (e.isWindowEvent) {
+    //   // console.log(`This event is fired on Window not on an element.`);
+    // }
+  }
+  allScrollPagination() {
+    this.allPageNumber = this.allPageNumber + 1;
+    this.getPhotos(this.allPageNumber)
+  }
+  scrollPagination() {
+    this.pageNumber = this.pageNumber + 1;
+    this.searchPhotos(this.searchQuery, this.pageNumber)
   }
 }

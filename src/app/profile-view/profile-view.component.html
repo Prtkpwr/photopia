@@ -10,18 +10,18 @@
         </div>
     </div>
     <!-- .lab-nav -->
-    <div class="wrapper">
+    <div class="wrapper" detect-scroll (onScroll)="handleScroll($event)" [bottomOffset]="50" [topOffset]="10">
         <div class="masonry">
             <div class="brick" style="position:relative;" *ngFor="let x of photos">
-                <img src="{{x.urls.small}}" class="image" alt="{{x.alt_description}}">
+                <img [defaultImage]="x.urls.thumb" [lazyLoad]="x.urls.small" class="image" alt="{{x.alt_description}}">
                 <div class="custom-top-left">
                     <h6 style="color: white;"> <i class="fa fa-heart" aria-hidden="true"></i> {{x.likes}}</h6>
                 </div>
                 <div class="custom-top-right">
-                    <h6 (click)="downloadImage(x.links.download)" style="color: white;"> <i class="fa fa-download"
-                            aria-hidden="true"></i></h6>
+                    <h6 (click)="downloadImage(x.links.download)" style="color: white;"> <i class="fa fa-download" aria-hidden="true"></i></h6>
                 </div>
             </div>
         </div>
+        <div *ngIf="loader" style="text-align: center;"> Loading.... </div>
     </div>
 </div>
