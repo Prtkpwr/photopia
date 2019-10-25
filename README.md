@@ -1,27 +1,48 @@
 # Photopia
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 8.1.1.
+https://photopia-101.firebaseapp.com
 
-## Development server
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+#### Prerequisites
+Before you begin, make sure your development environment includes `Node.js®` and an `npm` package manager.
 
-## Code scaffolding
+###### Node.js
+Angular requires `Node.js` version 8.x or 10.x
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+- To check your version, run `node -v` in a terminal/console window.
+- To get `Node.js`, go to [nodejs.org](https://nodejs.org/).
 
-## Build
+###### Angular CLI
+Install the Angular CLI globally using a terminal/console window.
+```bash
+npm install -g @angular/cli
+```
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `--prod` flag for a production build.
+##### Update to Angular 8
+Angular 8 requires `Node.js` version 12.x   
+Update guide - see: [https://update.angular.io](https://update.angular.io)
 
-## Running unit tests
+## Installation
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+### Clone repo
 
-## Running end-to-end tests
+``` bash
+# clone the repo
+$ git clone https://github.com/Prtkpwr/photopia/
 
-Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
+# go into app's directory
+$ cd photopia
 
-## Further help
+# install app's dependencies
+$ npm install
+```
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
+## Usage
+
+``` bash
+# serve with hot reload at localhost:4200.
+$ ng serve
+
+# build for production with minification
+$ ng build
+```
